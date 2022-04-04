@@ -17,15 +17,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer registerNewCustomer(CustomerDto customerDto) {
-        log.info("customerDTO {}", customerDto);
+        log.info("+registerNewCustomer(): customerDto: {}", customerDto);
         Customer customer = Customer.builder()
                 .firstName(customerDto.firstName())
                 .lastName(customerDto.lastName())
                 .email(customerDto.email())
                 .build();
 
-        log.info("customer {}", customer);
-
+        log.info("-registerNewCustomer()");
         return customerRepository.save(customer);
     }
 }
