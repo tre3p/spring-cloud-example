@@ -1,7 +1,8 @@
 package com.kodama.customer.service.impl;
 
+import com.kodama.clients.dto.FraudCheckResponse;
+import com.kodama.clients.fraud.FraudClient;
 import com.kodama.customer.dto.CustomerDto;
-import com.kodama.customer.dto.FraudCheckResponse;
 import com.kodama.customer.model.Customer;
 import com.kodama.customer.repository.CustomerRepository;
 import com.kodama.customer.service.CustomerService;
@@ -17,6 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
     private RestTemplate restTemplate;
+    private final FraudClient fraudClient;
 
     @Override
     public Customer registerNewCustomer(CustomerDto customerDto) {
@@ -29,11 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customerRepository.saveAndFlush(customer);
 
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://FRAUD/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class,
-                customer.getId()
-        );
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraud(customer.getId());
 
         customer.setIsFraud(fraudCheckResponse.isFraud());
 
