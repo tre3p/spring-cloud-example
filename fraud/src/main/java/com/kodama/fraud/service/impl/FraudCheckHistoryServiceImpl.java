@@ -7,22 +7,28 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Slf4j
 @Service
 @AllArgsConstructor
 public class FraudCheckHistoryServiceImpl implements FraudCheckHistoryService {
 
     private FraudCheckHistoryRepository fraudCheckHistoryRepository;
+    private Random rd;
 
     @Override
     public boolean isFraudster(Integer customerId) {
         log.info("+isFraudster(): customerId: {}", customerId);
+        boolean isFraudster = rd.nextBoolean();
+
         fraudCheckHistoryRepository.save(
                 FraudCheckHistory.builder()
                         .customerId(customerId)
-                        .isFraud(false)
+                        .isFraud(isFraudster)
                         .build()
         );
-        return false;
+        log.info("-isFraudster(): customerId: {}, isFraudster: {}", customerId, isFraudster);
+        return isFraudster;
     }
 }

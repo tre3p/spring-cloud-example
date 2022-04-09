@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setIsFraud(fraudCheckResponse.isFraud());
 
-        log.info("-registerNewCustomer()");
+        log.info("-registerNewCustomer(): customer: {}", customer);
         return customerRepository.save(customer);
     }
 }
