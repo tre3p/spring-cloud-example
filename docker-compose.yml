@@ -4,6 +4,8 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
+    networks:
+      - spring
   postgres:
     container_name: postgres
     image: postgres
@@ -38,8 +40,81 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - spring
+  eureka_server:
+    image: k0damadev/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - zipkin
+  api-gateway:
+    image: k0damadev/api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - eureka_server
+      - zipkin
+  customer:
+    image: k0damadev/customer:latest
+    container_name: customer
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - zipkin
+      - eureka_server
+      - postgres
+      - rabbitmq
+  fraud:
+    image: k0damadev/fraud:latest
+    container_name: fraud
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - zipkin
+      - eureka_server
+      - postgres
+      - rabbitmq
+  notification:
+    image: k0damadev/notification:latest
+    container_name: notification
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - zipkin
+      - eureka_server
+      - postgres
+      - rabbitmq
+
 networks:
   postgres:
+    driver: bridge
+  spring:
     driver: bridge
 volumes:
   postgres:
