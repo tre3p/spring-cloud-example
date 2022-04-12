@@ -12,6 +12,8 @@ Training project, which main goal was to practice with Spring Cloud. Maybe it wo
 
 ## Diagram
 
+~~Stolen~~ implemented from Amigoscode Microservices course
+
 ![alt text](https://github.com/k0damaDEV/spring-cloud-example/blob/main/cloud-diagram.png?raw=true)
 
 ## Launch
