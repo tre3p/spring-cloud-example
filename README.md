@@ -21,7 +21,7 @@ Training project, which main goal was to practice with Spring Cloud. Maybe it wo
 All projects can be started via docker-compose, so all you need is:
 
 ```sh
-git clone https://github.com/k0damaDEV/spring-cloud-example.git project-directory
+git clone https://github.com/tre3p/spring-cloud-example.git project-directory
 cd project-directory
 docker-compose up
 ```
